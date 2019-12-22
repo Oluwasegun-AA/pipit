@@ -3,19 +3,15 @@ import os
 class Config(object):
   DEBUG= False
   TESTING= False
-  DATABAE_URL= os.getenv('DATABAE_URL')
 
-class Production():
+class Production(object):
   DEBUG= False
   TESTING= False
-  DATABAE_URL= os.getenv('DATABAE_URL')
 
-class Development():
+class Development(object):
   DEBUG= False
   TESTING= True
-  DATABAE_URL= os.getenv('DATABAE_URL')
 
-class Testing():
+class Testing(object):
   DEBUG= True
   TESTING= True
-  DATABAE_URL= os.getenv('DATABAE_URL')

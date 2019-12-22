@@ -1,19 +1,20 @@
+'''app/__init__.py'''
+
 import os
 from flask import Flask, jsonify
-from instance.config import (Development, Testing, Production)
+from .helpers.env import getEnvironmentConfig
+from .database.dbSetup import SetupDb
+from app.database.dbSeed import InitDb
 
-def getEnvironmentConfig():
+def createApp():
+  APP = Flask(__name__)
+  APP.config.from_object(getEnvironmentConfig())
+  database = SetupDb()
+
   if os.getenv('FLASK_ENV') == 'development':
-    return Development
-  elif os.getenv('FLASK_ENV') == 'production':
-    return Production
-  else: return Testing
+    database = InitDb()
+    database.createTables()
+    database.seedDb()
 
+  return APP
 
-APP = Flask(__name__)
-APP.config.from_object(getEnvironmentConfig())
-
-@APP.route('/api/v1', methods=['GET', 'POST', 'PUT', 'DELETE', 'PATCH'])
-def index():
-    '''Index page function'''
-    return jsonify({'message': 'Welcome to flask, please navigate to "api/v1" to interract with the API'})
