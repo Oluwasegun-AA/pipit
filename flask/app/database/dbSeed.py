@@ -1,6 +1,6 @@
 import datetime
 import os
-from ..helpers.crypt import Password
+from app.helpers.crypt import Password
 from app.database.dbSetup import SetupDb
 
 query = f'''INSERT INTO "Users" (id,"firstName", "lastName", email, password, username, "isAdmin", verified, "createdAt", "updatedAt") VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'''
@@ -84,9 +84,13 @@ class InitDb(object):
     self.connection = SetupDb()
     self.cursor = self.connection.cursor()
 
+  def dropTables(self):
+     '''Drop all tables'''
+     self.cursor.execute('''DROP TABLE IF EXISTS "Users";''')
+
   def createTables(self):
-    '''Drop all tables'''
-    self.cursor.execute('''DROP TABLE IF EXISTS "Users";''')
+    if os.getenv('FLASK_ENV') == 'development':
+      self.dropTables()
 
     '''method creating tables'''
     self.cursor.execute('''CREATE TABLE IF NOT EXISTS "Users"(
@@ -115,3 +119,4 @@ class InitDb(object):
     self.connection.commit()
     self.cursor.close()
     self.connection.close()
+

@@ -15,6 +15,8 @@ def createApp():
     database = InitDb()
     database.createTables()
     database.seedDb()
+  else: 
+    database = InitDb().createTables()
 
   return APP
 
