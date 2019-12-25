@@ -10,3 +10,8 @@ def catchRouteErrors(APP):
   def baseUrl():
     '''Index page function'''
     return jsonify({'message': 'Welcome to the flask user forum API'})
+
+  @APP.route('/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE', 'PATCH'])
+  def badUrl(path):
+    '''unknown endpoint error'''
+    return jsonify({'message': f'''Invalid endpoint '/{path}'. please navigate to home via api/v1'''})
