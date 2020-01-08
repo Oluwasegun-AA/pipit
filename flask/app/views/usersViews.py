@@ -10,9 +10,9 @@ Users = UsersModel()
 
 
 class User(Resource):
-  def get(self):
+  def get(self, id):
     user = getRequest()
-    response = Users.getUser(user)
+    response = Users.getUser(str(id))
     return jsonify(response)
 
   def patch(self, id):
