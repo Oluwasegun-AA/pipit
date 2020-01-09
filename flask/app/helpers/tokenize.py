@@ -17,4 +17,5 @@ class Tokenize:
   def decrypt(token):
     try:
       return jwt.decode(token, os.getenv('SECRETE'), algorithms=[os.getenv('JWT_ALGORITHM')])
-    
+    except:
+      return {'error': 401, 'error': 'Unauthorized, invalid token'}

@@ -1,20 +1,27 @@
 from app.models.baseModel import baseModel
 from app.helpers.fetchData import fetch, fetchMany
 from app.validations.checkUserExist import checkUserExist
-# from app.validations.checkUserOwnsAccount import checkUserOwnsAccount
+from app.validations.checkUserOwnsAccount import checkUserOwnsAccount
+from app.validations.checkAdminInToken import checkAdminInToken
+from app.validations.checkTokenIsValid import checkTokenIsValid
 
 class UsersModel(baseModel):
 
-  @checkUserExist
+  @checkTokenIsValid
+  # @checkUserExist
+  # @checkAdminInToken
   def getUser(self, id):
     data = fetch(self.cursor, 'Users', id, 'where id = (%s);')
     return {'status': 200, 'message':'data retrieved successfully', 'data': data}
 
+  @checkAdminInToken
   def getAllUser(self):
     data = fetchMany(self.cursor, 'Users')
     return data
   
+  @checkTokenIsValid
   @checkUserExist
+  @checkUserOwnsAccount
   def updateUser(self, id, data):
     values = list(data.values())
     values.append(id)
@@ -23,21 +30,27 @@ class UsersModel(baseModel):
     data = fetch(self.cursor, 'Users', id, 'where id = (%s);')
     return data
   
+  @checkTokenIsValid
   @checkUserExist
+  @checkUserOwnsAccount
   def deleteUser(self, id):
     self.cursor.execute('''DELETE FROM "Users" WHERE id = (%s);''', [id])
     self.connection.commit()
     data = fetch(self.cursor, 'Users', id, 'where id = (%s);')
     return data
   
+  @checkTokenIsValid
   @checkUserExist
+  @checkAdminInToken
   def makeAdmin(self, id, data):
     self.cursor.execute('''UPDATE "Users" SET "isAdmin" = (%s) WHERE id = (%s);''', [data['isAdmin'], id])
     self.connection.commit()
     data = fetch(self.cursor, 'Users', id, 'where id = (%s);')
     return data
   
+  @checkTokenIsValid
   @checkUserExist
+  @checkAdminInToken
   def verifyUser(self, id):
     self.cursor.execute('''UPDATE "Users" SET verified = (%s) WHERE id = (%s);''', [True, id])
     self.connection.commit()
