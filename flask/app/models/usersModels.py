@@ -7,10 +7,8 @@ class UsersModel(baseModel):
 
   @checkUserExist
   def getUser(self, id):
-    print('iiiii', id)
     data = fetch(self.cursor, 'Users', id, 'where id = (%s);')
-    print('iiiii', data)
-    return data
+    return {'status': 200, 'message':'data retrieved successfully', 'data': data}
 
   def getAllUser(self):
     data = fetchMany(self.cursor, 'Users')

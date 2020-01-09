@@ -5,6 +5,7 @@ from app.helpers.fetchData import fetch
 from uuid import uuid4
 from app.helpers.crypt import Password
 from app.helpers.pick import pick
+from app.helpers.tokenize import Tokenize
 
 class authModel(baseModel):
 
@@ -16,7 +17,7 @@ class authModel(baseModel):
     else:
       response = formatResponse.single(self.cursor.description, result)
       if Password.decrypt(data['password'], response['password']):
-        return {'status': 200, 'message': 'login successful', 'token': pick(response, ['id', 'username', 'email'])}
+        return {'status': 200, 'message': 'login successful', 'token': Tokenize.encrypt(pick(response, ['id', 'username', 'email', 'isAdmin', 'isVerified']))}
       else: return {'status': 400, 'error': 'invalid username or password'}
   
   def signup(self, data):
