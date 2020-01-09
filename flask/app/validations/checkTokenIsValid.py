@@ -6,16 +6,12 @@ from app.helpers.tokenize import Tokenize
 connection = SetupDb()
 cursor = connection.cursor()
 
-def checkAdminInToken(f):
-  def check(*args, **kwargs):
-    token = request.headers.get('token')
-    dataInToken = Tokenize.decrypt(token)
-    if 'isAdmin' in dataInToken:
-      if dataInToken['isAdmin'] == 'False':
+def checkTokenIsValid(f):
+    def check(*args, **kwargs):
+      token = request.headers.get('token')
+      dataInToken = Tokenize.decrypt(token)
+      if 'error' in dataInToken:
         return {'error': 401, 'error': 'User Unauthorized'}
       else:
         return f(*args, **kwargs)
-    else:
-      return {'error': 401, 'error': 'User Unauthorized'}
-    
-  return check
+    return check

@@ -21,10 +21,12 @@ class authModel(baseModel):
       else: return {'status': 400, 'error': 'invalid username or password'}
   
   def signup(self, data):
-    self.cursor.execute('INSERT INTO "Users" (id,"firstName", "lastName", email, password, username, "isAdmin", verified) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)', [str(uuid4()), *list(data.values())])
+    print('aaaaaaaa', [str(uuid4()), *list(data.values()), False, False])
+    self.cursor.execute('INSERT INTO "Users" (id,"firstName", "lastName", email, password, username, "isAdmin", verified) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)', [str(uuid4()), *list(data.values()), False, False])
     self.connection.commit()
     data = fetch(self.cursor, 'Users', data['username'])
     if 'error' in data.keys():
+      print('ssssssssssss', data)
       return {'status': 500, 'error': 'Internal server error, user not created'}
     else:
       return {'status': 200, 'data': data}
