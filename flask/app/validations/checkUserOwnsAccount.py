@@ -1,4 +1,10 @@
-def checkUserExist(f):
+from app.helpers.fetchData import fetch
+from app.database.dbSeed import SetupDb
+
+connection = SetupDb()
+cursor = connection.cursor()
+
+def checkUserOwnsAccount(f):
     def check(*args, **kwargs):
       self, id = args
       if args[1]:

@@ -1,17 +1,20 @@
 from app.helpers.fetchData import fetch
 from app.database.dbSeed import SetupDb
+from flask import request
+from app.helpers.tokenize import Tokenize
 
 connection = SetupDb()
 cursor = connection.cursor()
 
-def checkUserOwnsAccount(f):
+def checkUserExist(f):
     def check(*args, **kwargs):
-      self, id = args
+      token = request.headers.get('token')
+      dataInToken = Tokenize.decrypt(token)
       if args[1]:
-        data = fetch(cursor, 'Users', args[1], 'where id = (%s)')
+        data = fetch(cursor, 'Users', str(args[1]), 'where id = (%s)')
         if 'error' in data.keys():
           return data
-        elif data[id] is str(id) or data['isAdmin'] is True: 
+        elif (str(data['id']) == str(dataInToken['id'])) or dataInToken['isAdmin'] == True: 
           return f(*args, **kwargs)
         else:
           return {'status': 401, 'error': 'user not authorized'}
