@@ -12,7 +12,7 @@ class UsersModel(baseModel):
   # @checkAdminInToken
   def getUser(self, id):
     data = fetch(self.cursor, 'Users', id, 'where id = (%s);')
-    return {'status': 200, 'message':'data retrieved successfully', 'data': data}
+    return dict({'status': 200, 'message':'data retrieved successfully', 'data': data}), 200
 
   @checkAdminInToken
   def getAllUser(self):

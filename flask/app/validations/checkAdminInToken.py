@@ -12,10 +12,10 @@ def checkAdminInToken(f):
     dataInToken = Tokenize.decrypt(token)
     if 'isAdmin' in dataInToken:
       if dataInToken['isAdmin'] == 'False':
-        return {'error': 401, 'error': 'User Unauthorized'}
+        return dict({'error': 401, 'error': 'User Unauthorized'}), 401
       else:
         return f(*args, **kwargs)
     else:
-      return {'error': 401, 'error': 'User Unauthorized'}
+      return dict({'error': 401, 'error': 'User Unauthorized'}), 401
     
   return check

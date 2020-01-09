@@ -17,9 +17,9 @@ def checkUserOwnsAccount(f):
         elif (str(data['id']) == str(dataInToken['id'])) or dataInToken['isAdmin'] == 'True': 
           return f(*args, **kwargs)
         else:
-          return {'status': 401, 'error': 'user not authorizedd'}
+          return dict({'status': 401, 'error': 'user not authorizedd'}), 401
       elif 'error' in dataInToken:
-        return {'error': 401, 'error': 'User Unauthoorized'}
+        return dict({'status': 401, 'error': 'User Unauthoorized'}), 401
       else:
-        return {'error': 'Bad request, invalid user Id'} 
+        return dict({'status': 401, 'error': 'Bad request, invalid user Id'}), 401
     return check

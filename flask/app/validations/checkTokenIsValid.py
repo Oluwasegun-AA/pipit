@@ -11,7 +11,7 @@ def checkTokenIsValid(f):
       token = request.headers.get('token')
       dataInToken = Tokenize.decrypt(token)
       if 'error' in dataInToken:
-        return {'error': 401, 'error': 'User Unauthorized'}
+        return dict({'error': 401, 'error': 'User Unauthorized'}), 401
       else:
         return f(*args, **kwargs)
     return check

@@ -1,7 +1,7 @@
 '''app/__init__.py'''
 
 import os
-from flask import Flask, jsonify
+from flask import Flask
 from .helpers.env import getEnvironmentConfig
 from .database.dbSetup import SetupDb
 from app.database.dbSeed import InitDb

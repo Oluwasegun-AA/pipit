@@ -15,5 +15,5 @@ def checkUserExist(f):
         else:
           return f(*args, **kwargs)
       else:
-        return {'error': 'Bad request, invalid user Id'} 
+        return dict({'status': 400, 'error': 'Bad request, invalid user Id'}), 400
     return check
