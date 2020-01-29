@@ -34,7 +34,6 @@ class TestBase(unittest.TestCase):
   def post(self, route, jsonData={}, jwtToken = None):
     response = self.client.post(route,
       content_type="application/json",
-      headers=dict(token=jwtToken),
       data=json.dumps(jsonData)
     )
     return json.loads(response.data)
@@ -42,7 +41,7 @@ class TestBase(unittest.TestCase):
   def get(self, route, jsonData={}, jwtToken = None):
     response = self.client.get(route,
       content_type="application/json",
-      headers=dict(token=jwtToken),
+      headers=dict(token = jwtToken),
       data=json.dumps(jsonData)
     )
     return json.loads(response.data)

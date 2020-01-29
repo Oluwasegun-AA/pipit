@@ -1,4 +1,4 @@
-def normalize(data):
+def cleanData(data):
   dataDict = {}
   if type(data) == dict:
     for a, b in data.items():
@@ -9,3 +9,12 @@ def normalize(data):
       else: dataDict[a] = f'{b}'
     return dataDict
   else: return data
+
+def normalize(data):
+  dataArr= []
+  if type(data) == list:
+    for item in data:
+      dataArr.append(cleanData(item))
+    return dataArr
+  else:
+    return cleanData(data)
