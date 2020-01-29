@@ -1,5 +1,5 @@
-def pick(customDict, dataArray):
+def pick(customDict, keysArray):
   myDict = {}
-  for key in range(len(dataArray)):
-      myDict[dataArray[key]] = customDict[dataArray[key]] if dataArray[key] in customDict else ''
+  for key in range(len(keysArray)):
+      myDict[keysArray[key]] = customDict[keysArray[key]] if keysArray[key] in customDict else ''
   return myDict

@@ -5,3 +5,4 @@ def getRequest():
     return dict(request.get_json(force=True))
   else:
     return dict(request.form)
+
