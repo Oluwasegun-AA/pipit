@@ -1,6 +1,6 @@
 import psycopg2
 import os
-from ..helpers.env import getEnvironmentConfig
+from app.helpers.env import getEnvironmentConfig
 
 def SetupDb():
-  return psycopg2.connect(os.getenv('DATABASE_URL'))
+  return psycopg2.connect(dbname='flask', user='postgres', host='localhost')

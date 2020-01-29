@@ -5,6 +5,8 @@ from uuid import uuid4
 from app.helpers.crypt import Password
 from app.helpers.pick import pick
 from app.helpers.tokenize import Tokenize
+from app.helpers.normalizeObj import normalize
+from app.helpers.omit import omit
 
 class authModel(baseModel):
 
@@ -23,7 +25,7 @@ class authModel(baseModel):
     self.cursor.execute('INSERT INTO "Users" (id,"firstName", "lastName", email, password, username, "isAdmin", verified) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)', [str(uuid4()), *list(data.values()), False, False])
     self.connection.commit()
     data = fetch(self.cursor, 'Users', data['username'])
-    if 'error' in data.keys():
+    if type(data) == tuple and 'error' in data[0].keys():
       return dict({'status': 500, 'error': 'Internal server error, user not created'}), 500
     else:
-      return dict({'status': 200, 'data': data}), 200
+      return dict({'status': 200, 'data': normalize(omit(data, ['password']))}), 200

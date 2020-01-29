@@ -6,10 +6,10 @@ import os
 
 def addResources(app):
   BASE = os.getenv('BASE_URL')
-  api = Api(app, catch_all_404s=True)
-  api.add_resource(auth, BASE+'/auth/login')
-  api.add_resource(signup, BASE+'/auth/signup')
-  api.add_resource(User, BASE+'/user', BASE+'/user/<id>/')
-  api.add_resource(GetAllUser, BASE+'/users')
-  api.add_resource(VerifyUser, BASE+'/user/verify/<id>')
-  api.add_resource(makeAdmin, BASE+'/user/authorize/<id>')
+  api = Api(app, prefix='/api/v1', catch_all_404s=True)
+  api.add_resource(auth, '/auth/login')
+  api.add_resource(signup, '/auth/signup')
+  api.add_resource(User, '/user', '/user/<id>/')
+  api.add_resource(GetAllUser, '/users')
+  api.add_resource(VerifyUser, '/user/verify/<id>')
+  api.add_resource(makeAdmin, '/user/authorize/<id>')

@@ -4,6 +4,7 @@ from app.validations.checkUserExist import checkUserExist
 from app.validations.checkUserOwnsAccount import checkUserOwnsAccount
 from app.validations.checkAdminInToken import checkAdminInToken
 from app.validations.checkTokenIsValid import checkTokenIsValid
+from app.helpers.normalizeObj import normalize
 
 class UsersModel(baseModel):
 
@@ -12,12 +13,12 @@ class UsersModel(baseModel):
   # @checkAdminInToken
   def getUser(self, id):
     data = fetch(self.cursor, 'Users', id, 'where id = (%s);')
-    return dict({'status': 200, 'message':'data retrieved successfully', 'data': data}), 200
+    return dict({'status': 200, 'message':'data retrieved successfully', 'data': normalize(data)}), 200
 
   @checkAdminInToken
   def getAllUser(self):
     data = fetchMany(self.cursor, 'Users')
-    return data
+    return normalize(data), 200
   
   @checkTokenIsValid
   @checkUserExist
@@ -28,7 +29,7 @@ class UsersModel(baseModel):
     self.cursor.execute('''UPDATE "Users" SET username = (%s), email = (%s), "firstName" = (%s), "lastName" = (%s) WHERE id = (%s);''', values)
     self.connection.commit()
     data = fetch(self.cursor, 'Users', id, 'where id = (%s);')
-    return data
+    return normalize(data)
   
   @checkTokenIsValid
   @checkUserExist

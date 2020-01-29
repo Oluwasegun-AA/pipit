@@ -1,13 +1,12 @@
 import os
 import jwt
 import datetime
+from app.helpers.normalizeObj import normalize
 
 class Tokenize:
   @staticmethod
   def encrypt(data):
-    dataDict = {}
-    for a, b in data.items():
-      dataDict[a] = f'{b}'
+    dataDict = normalize(data)
     dataDict['exp'] = datetime.datetime.utcnow() + datetime.timedelta(seconds=3600)
     values = dict(dataDict)
     return (jwt.encode(dataDict, os.getenv('SECRETE'), algorithm=os.getenv('JWT_ALGORITHM'))).decode('utf-8')

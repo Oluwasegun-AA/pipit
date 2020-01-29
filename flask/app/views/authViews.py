@@ -1,4 +1,3 @@
-
 from flask_restful import Resource
 from app.helpers.request import getRequest
 from app.models.authModels import authModel
