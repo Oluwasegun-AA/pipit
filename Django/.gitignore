@@ -110,3 +110,4 @@ dmypy.json
 # virtual environment files
 bin
 include
+migrations
