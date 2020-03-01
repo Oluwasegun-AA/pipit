@@ -1,8 +1,7 @@
-from flask import jsonify, request
+from flask import request
 
 def getRequest():
   if request.headers['Content-Type'] == 'application/json':
-    return request.get_json(force=True)
+    return dict(request.get_json(force=True))
   else:
-    return request.form
-    
+    return dict(request.form)
