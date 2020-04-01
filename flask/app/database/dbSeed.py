@@ -3,7 +3,7 @@ import os
 from app.helpers.crypt import Password
 from app.database.dbSetup import SetupDb
 
-query = f'''INSERT INTO "Users" (id,"firstName", "lastName", email, password, username, "isAdmin", verified, "createdAt", "updatedAt") VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'''
+query = 'INSERT INTO "Users" (id,"firstName", "lastName", email, password, username, "isAdmin", verified, "createdAt", "updatedAt") VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'
 
 users = [(
   '982a2372-f228-44c2-816a-3ef022e689fb',
