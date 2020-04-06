@@ -1,4 +1,4 @@
-#!/Users/oluwasegunadepoju/Desktop/dev/vsc/personal/python/pipit/flask/bin/python
+#!/Users/oluwasegunadepoju/Desktop/dev/vsc/personal/python/pipit/flask/venv/bin/python
 
 import sys
 import getopt
