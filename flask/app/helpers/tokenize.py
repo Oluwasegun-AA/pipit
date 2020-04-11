@@ -7,9 +7,9 @@ class Tokenize:
   @staticmethod
   def encrypt(data):
     dataDict = normalize(data)
-    dataDict['exp'] = datetime.datetime.utcnow() + datetime.timedelta(seconds=3600)
-    values = dict(dataDict)
-    return (jwt.encode(dataDict, os.getenv('SECRETE'), algorithm=os.getenv('JWT_ALGORITHM'))).decode('utf-8')
+    signatures = { "exp": datetime.datetime.utcnow() + datetime.timedelta(seconds=3600), "iat": datetime.datetime.utcnow() }
+    values = dict({**dataDict, **signatures})
+    return (jwt.encode(values, os.getenv('SECRETE'), algorithm=os.getenv('JWT_ALGORITHM'))).decode('utf-8')
   
   @staticmethod
   def decrypt(token):
