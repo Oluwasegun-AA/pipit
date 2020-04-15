@@ -3,6 +3,7 @@ from uuid import uuid4
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from app.helpers.crypt import Password
 import datetime
+from ..helpers.tokenize import Tokenize
 
 class UserManager(BaseUserManager):
   """
@@ -91,17 +92,17 @@ class User_model(AbstractBaseUser, PermissionsMixin):
   is_active = models.BooleanField(default=True)
   is_staff = models.BooleanField(default=False)
   USERS = (
-        ('A', 'Admin'),
-        ('S', 'SuperAdmin'),
-        ('U', 'User'),
+        ('Admin', 'Admin'),
+        ('SuperAdmin', 'SuperAdmin'),
+        ('User', 'User'),
     )
-  role = models.CharField(max_length=10, choices=USERS, default='U')
+  role = models.CharField(max_length=10, choices=USERS, default='User')
   is_verified = models.BooleanField(default=False)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now_add=True)
 
-  USERNAME_FIELD = 'username'
-  REQUIRED_FIELDS = ['email']
+  USERNAME_FIELD = 'email'
+  REQUIRED_FIELDS = ['username']
 
   # Tells Django that the UserManager class defined above should manage
   # objects of this type.
@@ -109,3 +110,28 @@ class User_model(AbstractBaseUser, PermissionsMixin):
   
   class Meta:
         db_table = 'Users'
+  
+  # returns a string/turple is none callable error in the django admin window when un-commented
+  # @property
+  # def __str__(self):
+  #     return (self.first_name, self.last_name, f"({self.username})")
+  
+  @property
+  def get_short_name(self):
+      """
+      This method is required by Django for things like handling emails.
+      Typically, this would be the user's first name. Since we do not store
+      the user's real name, we return their username instead.
+      """
+      return self.username
+  @property
+  def fullname(self):
+      return f'{self.first_name} {self.last_name}'
+  
+  @property
+  def token(self):
+      """
+      Generates the token and allows the token to be read via `user.token`
+      : return string
+      """
+      return Tokenize.encrypt({"id": f'{self.pk}', "email": self.email})

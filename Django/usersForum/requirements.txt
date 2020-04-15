@@ -4,9 +4,11 @@ cffi==1.14.0
 cryptography==2.8
 Django==3.0.4
 django-dotenv==1.4.2
+djangorestframework==3.11.0
 jwt==0.6.1
 psycopg2==2.8.4
 pycparser==2.19
+PyJWT==1.7.1
 python-decouple==3.3
 python-dotenv==0.10.5
 pytz==2019.3
