@@ -1,19 +1,16 @@
-import os
-import jwt
+from decouple import config
 import datetime
-from app.helpers.manupulateObj import normalize
+import jwt
+import json
 
 class Tokenize:
   @staticmethod
   def encrypt(data):
-    dataDict = normalize(data)
-    dataDict['exp'] = datetime.datetime.utcnow() + datetime.timedelta(seconds=3600)
-    values = dict(dataDict)
-    return (jwt.encode(dataDict, os.getenv('SECRETE'), algorithm=os.getenv('JWT_ALGORITHM'))).decode('utf-8')
+    decode_key = config('SECRETE')+ str(data['id']).lower().replace('e', config('SECRETE'))
+    signatures = { "exp": datetime.datetime.utcnow() + datetime.timedelta(seconds=3600), "iat": datetime.datetime.utcnow() }
+    values = dict({**data, **signatures})
+    return (jwt.encode(values, decode_key, algorithm=config('JWT_ALGORITHM'))).decode('utf-8')
   
   @staticmethod
-  def decrypt(token):
-    try:
-      return jwt.decode(token, os.getenv('SECRETE'), algorithms=[os.getenv('JWT_ALGORITHM')])
-    except:
-      return dict({'error': 401, 'error': 'Unauthorized, invalid token'}), 401
+  def decrypt(token, decode_key, verify=True):
+      return jwt.decode(token, decode_key, algorithm=config('JWT_ALGORITHM'), verify=verify)
