@@ -65,8 +65,9 @@ REST_FRAMEWORK = {
         'app.users.authentication.JWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ),
+    'NON_FIELD_ERRORS_KEY': 'error',
 }
 
 MIDDLEWARE = [

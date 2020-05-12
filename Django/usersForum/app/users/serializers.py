@@ -8,11 +8,11 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User_model
         fields = (
-            'id',
             'username',
             'image_url',
             'first_name',
             'last_name',
+            'password',
             'email',
             'facebook',
             'instagram',
@@ -24,7 +24,59 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             'is_verified',
             'created_at',
             'updated_at',
+            'token'
         )
+        token = serializers.CharField(
+        read_only=True
+    )
+        
+    def validate(self, data):
+      if not data:
+        return serializers.ValidationError('Invalid data')
+
+      email = data.get('email', None)
+      username = data.get('username', None)
+      password = data.get('password', None)
+
+      if(self.context['method'] != 'update'):
+        if (username or email or password) == None:
+          raise serializers.ValidationError(
+                'Email, username and password are required to signup.'
+            )
+
+        queryset = User_model.objects.filter(email=email)
+      
+        if queryset.exists():
+          raise serializers.ValidationError('User already signed up')
+      
+      return data
+
+    def create(self, validated_data):
+      """
+      Create a new instance of data
+      """
+      return User_model.objects.create_user(**validated_data)
+    
+    def update(self, instance, validated_data):
+        """
+        Update and return an existing data instance, given the validated data.
+        """
+        instance.username = validated_data.get('username', instance.username)
+        instance.image_url = validated_data.get('image_url', instance.image_url)
+        instance.first_name = validated_data.get('first_name', instance.first_name)
+        instance.last_name = validated_data.get('last_name', instance.last_name)
+        instance.email = validated_data.get('email', instance.email)
+        instance.facebook = validated_data.get('facebook', instance.facebook)
+        instance.instagram = validated_data.get('instagram', instance.instagram)
+        instance.twitter = validated_data.get('twitter', instance.twitter)
+        instance.current_location = validated_data.get('current_location', instance.current_location)
+        instance.is_active = validated_data.get('is_active', instance.is_active)
+        instance.is_staff = validated_data.get('is_staff', instance.is_staff)
+        instance.role = validated_data.get('role', instance.role)
+        instance.is_verified = validated_data.get('is_verified', instance.is_verified)
+        instance.save()
+        return instance
+        
 
 class LoginSerializer(serializers.Serializer):
     id = serializers.CharField(read_only=True)
