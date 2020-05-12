@@ -111,7 +111,7 @@ class User_model(AbstractBaseUser, PermissionsMixin):
   class Meta:
         db_table = 'Users'
   
-  # returns a string/turple is none callable error in the django admin window when un-commented
+  # returns a "string/tuple is none callable" error in the django admin window when un-commented
   # @property
   # def __str__(self):
   #     return (self.first_name, self.last_name, f"({self.username})")
@@ -134,4 +134,4 @@ class User_model(AbstractBaseUser, PermissionsMixin):
       Generates the token and allows the token to be read via `user.token`
       : return string
       """
-      return Tokenize.encrypt({"id": f'{self.pk}', "email": self.email})
+      return Tokenize.encrypt({"id": f'{self.pk}', "role": f'{self.role}', "email": self.email})
