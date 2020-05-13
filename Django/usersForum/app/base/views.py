@@ -12,3 +12,4 @@ def routeError(request):
     'status': 400,
     'message': f'invalid route "{request.path}", please checkout the API documentation via "api/vi/docs"'
     })
+    

@@ -38,7 +38,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
       user = request.data.get('user', None)
-      serializer = self.serializer(data=user)
+      serializer = self.serializer(data=user, context={'method': 'create'})
       serializer.is_valid(raise_exception=True)
       serializer.save()
       return Response({'message': 'User created successfully', 'data': serializer.data}, status=status.HTTP_201_CREATED)
@@ -47,14 +47,14 @@ class UserViewSet(viewsets.ModelViewSet):
       # get all users
       self.check_object_permissions(request, obj={})
       users = User_model.objects.all().order_by('username')
-      data = self.serializer(users, many=True).data
+      data = self.serializer(users, many=True, context={'method': 'list'}).data
       return Response({'message': 'Data retrieved successfully', 'data':omit(data, ['password', 'token'])}, status=status.HTTP_200_OK)
 
     def retrieve(self, request, pk=None):
       # get one user
       self.check_object_permissions(request, {"id":pk})
       queryset = User_model.objects.get(pk=pk)
-      data = self.serializer(queryset).data
+      data = self.serializer(queryset, context={'method': 'retrieve'}).data
       return Response({'message': 'Data retrieved successfully', 'data':omit(data, ['token', 'password'])}, status=status.HTTP_200_OK)
 
     def update(self, request, pk=None):
@@ -91,7 +91,6 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, pk=None):
       # delete a user
-      print('delete/destroy ti gbe enter')
       self.check_object_permissions(request, {"id":pk})
 
       try:
@@ -122,15 +121,3 @@ class LoginAPIView(APIView):
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-# class CreateUserAPIView(APIView):
-#   permission_classes = (AllowAny,)
-#   renderer_classes = (UserJSONRenderer,)
-#   serializer_class = UserSerializer
-
-#   def post(self, request):
-#     # post a user
-#     user = request.data.get('user', {})
-#     serializer = self.serializer_class(data=user)
-#     print('create/post ti gbe wole')
-#     return Response(serializer.data)
