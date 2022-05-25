@@ -8,7 +8,7 @@ djangorestframework==3.11.2
 jwt==0.6.1
 psycopg2==2.8.4
 pycparser==2.19
-PyJWT==1.7.1
+PyJWT==2.4.0
 python-decouple==3.3
 python-dotenv==0.10.5
 pytz==2019.3
